@@ -1,0 +1,10 @@
+.top-menu {
+    border: 1px dotted silver;
+    min-height: 18px;
+    padding: 4px;
+    margin-bottom: 4px;
+}
+
+.menu-options {
+    float: right;
+}
