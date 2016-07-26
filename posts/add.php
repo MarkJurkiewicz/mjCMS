@@ -1,10 +1,12 @@
-<?php require_once(__DIR__. "/../includes/header.php"); ?>
-<?php require_once(__DIR__ . "/../includes/functions.php"); ?>
 <?php require_once(__DIR__ . "/../includes/config.php"); ?>
+<?php require_once(__DIR__ . "/../includes/functions.php"); ?>
+<?php blockEntity(); ?>
+<?php require_once(__DIR__. "/../includes/header.php"); ?>
+
 
 <h2>Add Page</h2>
 <div>
-    <?php echo returnPageError(); ?>
+    <?php echo returnPostError(); ?>
 </div>
 <form action="process_add.php" method="post">
     <div class="form-group">
@@ -13,15 +15,15 @@
     </div>
     <div class="form-group">
         <label for="body">Body</label>
-        <input type="text" name="body" id="body" class="form-control" value="">
+        <textarea name="body" id="body" class="form-control"></textarea>
     </div>
     <div class="form-group">
-        <label for="published">Publish?</label>
-        <input type="checkbox" name="published" id="published" value="1">
+        <label for="created_at">
+        <input type="checkbox" name="created_at" id="created_at" value="1">Publish?
+        </label>
     </div>
     <div class="form-group">
-        <label for="title">Title</label>
-        <input type="submit" name="title" id="title" class="form-control" value="Create">
+        <input type="submit" class="form-control" value="Create">
     </div>
 
 </form>

@@ -29,4 +29,3 @@ if(loginUser($user)){
 } else {
     echo "Couldn't log in user";
 }
-?>

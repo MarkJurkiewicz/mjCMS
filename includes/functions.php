@@ -8,8 +8,10 @@ class DB
 {
     private static $conn;
 
-    public static function getConnect(){
-        if(!self::$conn){
+    public static function getConnect()
+    {
+        if(!self::$conn)
+        {
             $connectStr = "mysql:dbname=".DB_NAME.";host=".DB_HOST."";
             self::$conn = new PDO ($connectStr, DB_USER, DB_PASS);
         }
@@ -17,11 +19,12 @@ class DB
     }
 }
 
-function findUserById($username){
+function findUserById($username)
+{
 
     $pdo = DB::getConnect();
 
-    $sql = "SELECT * FROM users WHERE username = :username";
+    $sql = "SELECT * FROM users WHERE USERNAME = :username";
 
     $stmt = $pdo->prepare($sql);
 
@@ -29,7 +32,8 @@ function findUserById($username){
         ":username" => $username
     ]);
 
-    if(!$exec){
+    if(!$exec)
+    {
         print_r($stmt->errorInfo());
         exit("An error occured executing statement");
     }
@@ -39,7 +43,8 @@ function findUserById($username){
     return $result;
 }
 
-function loginUser($user){
+function loginUser($user)
+{
     startSession();
 
     $_SESSION["ID"] = $user["ID"];
@@ -48,29 +53,35 @@ function loginUser($user){
     return $_SESSION["USERNAME"] && $_SESSION["ID"];
 }
 
-function startSession(){
-    if(session_status() == PHP_SESSION_NONE){
+function startSession()
+{
+    if(session_status() === PHP_SESSION_NONE)
+    {
         session_start();
     }
 }
 
-function validateLogin($details){
+function validateLogin($details)
+{
     $toBeValidated = ["username", "password"];
     $errors = [];
 
-    foreach($toBeValidated as $input){
+    foreach($toBeValidated as $input)
+    {
         if(!isset($details[$input]) || strlen(trim($details[$input])) === 0){
             $errors[$input] = "$input cannot be empty";
         }
     }
-    if(count($errors) !== 0){
+    if(count($errors) !== 0)
+    {
         return [false, $errors];
     }
 
     return [true, $errors];
 }
 
-function returnPageError(){
+function returnPostError()
+{
     $errorString = "";
 
     if(isset($_GET["error"])){
@@ -89,7 +100,7 @@ function returnPageError(){
     return $errorString;
 }
 
-function getPages()
+function getPosts()
 {
     $pdo = DB::getConnect();
 
@@ -100,19 +111,80 @@ function getPages()
     return $result;
 }
 
-function createPage($data){
+function createPost($data)
+{
     $pdo = DB ::getConnect();
 
-    $sql = "INSERT INTO post (title, body, created_at) VALUES(:title, :body, :created_at)";
+    $sql = "INSERT INTO post (title, body, created_at) VALUES(:title, :body, :published)";
 
     $stmt = $pdo->prepare($sql);
 
     $inserted = $stmt->execute([
         ":title"=> $data["title"],
         ":body" => $data["body"],
-        ":created_at" => $data["created_at"]
+        ":published" => $data["created_at"]
     ]);
 
     return $inserted;
 }
-?>
+
+function editPost($id, $data)
+{
+    $pdo = DB::getConnect();
+
+    $sql = "UPDATE post SET title = :title, body = :body, created_at = :published WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $edited = $stmt->execute([
+        ":id" => $id,
+        ":title" => $data["title"],
+        ":body" => $data["body"],
+        ":published" => $data["created_at"]
+    ]);
+
+    return $edited;
+}
+
+
+function getPost($id)
+{
+    $pdo = DB::getConnect();
+
+    $sql = "SELECT * FROM post WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        ":id" => $id
+    ]);
+
+    $row = $stmt->fetch();
+
+    return $row;
+}
+
+function deletePost($id)
+{
+    $pdo = DB::getConnect();
+
+    $sql = "DELETE FROM post WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $deleted = $stmt->execute([
+        ":id"=> $id
+    ]);
+
+    return $deleted;
+}
+
+function blockEntity()
+{
+    startSession();
+
+    if (!isset($_SESSION["ID"]))
+    {
+        header("Location: ../login.php?message=You don't have access to that page.Please login!");
+        }
+    }
