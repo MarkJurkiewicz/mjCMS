@@ -104,7 +104,7 @@ function getPosts()
 {
     $pdo = DB::getConnect();
 
-    $sql = "SELECT id, title, body FROM post";
+    $sql = "SELECT id, title, body FROM post WHERE created_at = 1";
 
     $result = $pdo->query($sql);
 
@@ -188,3 +188,113 @@ function blockEntity()
         header("Location: ../login.php?message=You don't have access to that page.Please login!");
         }
     }
+
+function returnPageMessage()
+{
+    $infoStr = "";
+
+    if(isset($_GET["message"]))
+{
+    if(is_array($_GET["message"]))
+{
+       foreach($_GET["message"] as $message)
+       {
+                $infoStr .= "<p><span>{$message}</span></p>";
+       }
+       } else {
+            $message = $_GET['message'];
+            $infoStr = "<p><span>{$message}</span></p>";
+       }
+    }
+    return $infoStr;
+}
+
+function getUnpublishedPosts()
+{
+    $pdo = DB::getConnect();
+
+    $sql = "SELECT id, title, body FROM post WHERE created_at = 0";
+
+    $result = $pdo->query($sql);
+
+    return $result;
+}
+
+function publishPost($id)
+{
+    $pdo = DB::getConnect();
+
+    $sql = "UPDATE post SET created_at = 1 WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $edited = $stmt->execute([
+        ":id" => $id
+    ]);
+        return $edited;
+}
+
+function createUser($data)
+{
+    $pdo = DB::getConnect();
+
+    $sql = "INSERT INTO users (USERNAME, first_name, last_name, password)
+            VALUES(:username, :first_name, :last_name, :password)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $inserted = $stmt->execute([
+        ":username" => $data["USERNAME"],
+        ":first_name" => $data["first_name"],
+        ":last_name" => $data["last_name"],
+        ":password" => $data["password"]
+    ]);
+
+    return $inserted;
+}
+
+function getUsers()
+{
+    $pdo = DB::getConnect();
+
+    $sql = "SELECT ID, USERNAME, first_name, last_name FROM users";
+
+    $result = $pdo->query($sql);
+
+    return $result;
+}
+
+function getUser($id)
+{
+    $pdo = DB::getConnect();
+
+    $sql = "SELECT * FROM users WHERE ID";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        "ID" => $id
+    ]);
+
+    $row = $stmt->fetch();
+
+    return $row;
+}
+
+function editUser($id, $data)
+{
+        $pdo = DB::getConnect();
+
+        $sql = "UPDATE users SET USERNAME = :username, first_name = :first_name, last_name = :last_name WHERE ID = :id";
+
+        $stmt = $pdo->prepare($sql);
+
+        $edited = $stmt->execute([
+            ":id" => $id,
+            ":username" => $data["USERNAME"],
+            ":first_name" => $data["first_name"],
+            ":last_name" => $data["last_name"]
+        ]);
+
+        return $edited;
+}

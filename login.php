@@ -1,7 +1,7 @@
 <?php require_once("includes/functions.php"); ?>
 <?php require_once("includes/header.php"); ?>
     <h2>Login</h2>
-    <div class="">
+    <div>
         <?php echo returnPostError(); ?>
     </div>
     <form class="" action="process_login.php" method="post">

@@ -1,5 +1,6 @@
-<?php require_once(__DIR__ . "/../includes/functions.php"); ?>
 <?php require_once(__DIR__ . "/../includes/config.php"); ?>
+<?php require_once(__DIR__ . "/../includes/functions.php"); ?>
+<?php blockEntity(); ?>
 <?php
 
 $id = $_POST["id"];

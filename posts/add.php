@@ -3,8 +3,7 @@
 <?php blockEntity(); ?>
 <?php require_once(__DIR__. "/../includes/header.php"); ?>
 
-
-<h2>Add Page</h2>
+<h2>Add Your Post</h2>
 <div>
     <?php echo returnPostError(); ?>
 </div>
@@ -18,9 +17,8 @@
         <textarea name="body" id="body" class="form-control"></textarea>
     </div>
     <div class="form-group">
-        <label for="created_at">
-        <input type="checkbox" name="created_at" id="created_at" value="1">Publish?
-        </label>
+    <label for="created_at">
+        <input type="checkbox" name="created_at" id="created_at" value="1"> Publish?
     </div>
     <div class="form-group">
         <input type="submit" class="form-control" value="Create">
