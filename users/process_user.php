@@ -1,6 +1,8 @@
 <?php
 require_once(__DIR__ . "/../includes/config.php");
 require_once(__DIR__ . "/../includes/functions.php");
+blockEntity();
+
 
 $_POST["password"] = password_hash($_POST["USERNAME"], PASSWORD_DEFAULT);
 

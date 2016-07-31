@@ -14,6 +14,8 @@ class DB
         {
             $connectStr = "mysql:dbname=".DB_NAME.";host=".DB_HOST."";
             self::$conn = new PDO ($connectStr, DB_USER, DB_PASS);
+            self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
         }
         return self::$conn;
     }
@@ -32,6 +34,7 @@ function findUserById($username)
         ":username" => $username
     ]);
 
+
     if(!$exec)
     {
         print_r($stmt->errorInfo());
@@ -41,6 +44,7 @@ function findUserById($username)
     $result = $stmt->fetchAll();
 
     return $result;
+
 }
 
 function loginUser($user)
@@ -268,18 +272,25 @@ function getUser($id)
 {
     $pdo = DB::getConnect();
 
-    $sql = "SELECT * FROM users WHERE ID";
+    $sql = "SELECT *
+            FROM users
+            WHERE ID = :id";
 
+try {
     $stmt = $pdo->prepare($sql);
 
     $stmt->execute([
-        "ID" => $id
+        ':id' => '$id'
     ]);
-
-    $row = $stmt->fetch();
-
+} catch (Exception $ex )
+{
+    echo ("Exception message: ".$ex->getMessage());
+}
+    print_r($stmt);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row;
 }
+
 
 function editUser($id, $data)
 {
@@ -295,6 +306,7 @@ function editUser($id, $data)
             ":first_name" => $data["first_name"],
             ":last_name" => $data["last_name"]
         ]);
+
 
         return $edited;
 }

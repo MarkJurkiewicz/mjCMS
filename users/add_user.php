@@ -9,8 +9,8 @@ blockEntity(); ?>
     </div>
 <form action="process_user.php" method="post">
     <div class="form-group">
-        <label for="username">Username</label>
-        <input class="form-control" type="text" name="username" id="username">
+        <label for="USERNAME">Username</label>
+        <input class="form-control" type="text" name="USERNAME" id="USERNAME">
     </div>
     <div class="form-group">
         <label for="first_name">First Name</label>
